@@ -29,10 +29,13 @@ def wishMe():
     else:
         speak("Good Evening!")
 
-    speak("I am Jarvis sir. Please tell me how may i help you?")
+    speak("I am Jarvis sir, I am here to help you")
 
+def takeManualCommand():
+    query = input("write: ")
+    return query
 
-def takeCommand():
+def takeVoiceCommand():
     """
     it takes microphone input from the user and returns string output
     """
@@ -51,6 +54,8 @@ def takeCommand():
         return "None"
     return query
 
+# def takeCommand():
+    # pass
 def sendEmail(to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
@@ -61,8 +66,25 @@ def sendEmail(to,content):
 
 if __name__ == "__main__":
     wishMe()
+    speak("do you want to say or write?")
+    speak("Enter 1 for say or 2 for write")
+    z = int(input("Enter: "))
+    if z==1:
+        speak("Okk sir...thank you, Please tell how can i help you?")
+        takeCommand = takeVoiceCommand
+    elif z==2:
+        speak("Okk sir...thank you, Please write how can i help you?")
+        takeCommand = takeManualCommand
+    else:
+        speak("Wrong input sir! So by default i am taking manual command")
+        speak("Please write how can i help you?")
+        takeCommand = takeManualCommand
+    track = 0
     while True:
+        if track:
+            speak("Sir, is there anything else which i can help you?")
         query = takeCommand().lower()
+        track = 1
         # logic for executing tasks based on query
         if 'wikipedia' in query:
             speak('searching wikipedia...')
@@ -95,11 +117,12 @@ if __name__ == "__main__":
             codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(codePath)
 
-        elif 'email to anirban' in query: 
+        elif 'email' in query: 
             try:
+                speak("Sir, please enter the mail id to whom you want to send the mail")
+                to = input("Enter the mail id: ")
                 speak("what should I say?")
                 content = takeCommand()
-                to = "deyanirban955@gmail.com"
                 sendEmail(to, content)
                 speak("Email has been sent!")
             except Exception as e:
