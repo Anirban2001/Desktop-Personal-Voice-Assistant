@@ -109,7 +109,7 @@ if __name__ == "__main__":
             print(songs)
             os.startfile(os.path.join(music_dir,songs[0]))
 
-        elif 'the time' in query:
+        elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"sir, the time is {strTime}")
 
@@ -132,4 +132,6 @@ if __name__ == "__main__":
         elif 'exit' in query:
             speak("ok sir...thank you")
             break
+        else :
+            speak("Sorry sir i did not get you...")
         
