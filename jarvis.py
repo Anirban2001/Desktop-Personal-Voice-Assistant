@@ -6,6 +6,9 @@ import wikipedia
 import webbrowser
 import os
 import smtplib
+import time
+import random
+import getpass
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -50,18 +53,19 @@ def takeVoiceCommand():
         print(f"user said: {query}\n")
     except Exception as e:
         # print(e)
-        print("Say that again please...")
+        # print("Say that again please...")
         return "None"
     return query
 
 # def takeCommand():
     # pass
-def sendEmail(to,content):
+def sendEmail(mymail,password,to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
     server.starttls()
-    server.login('deyanirban977@gmail.com','1161087708')
-    server.sendmail('deyanirban977@gmail.com',to,content)
+    
+    server.login(mymail,password)
+    server.sendmail(mymail,to,content)
     server.close()
 
 if __name__ == "__main__":
@@ -80,8 +84,10 @@ if __name__ == "__main__":
         speak("Please write how can i help you?")
         takeCommand = takeManualCommand
     track = 0
+    timegap = 2
     while True:
         if track:
+            time.sleep(timegap)
             speak("Sir, is there anything else which i can help you?")
         query = takeCommand().lower()
         track = 1
@@ -93,45 +99,69 @@ if __name__ == "__main__":
             speak("According to wikipedia")
             print(results)
             speak(results)
+            timegap=2
 
         elif 'open youtube' in query:
+            speak("opening youtube...")
             webbrowser.open("youtube.com")
+            timegap=8
 
         elif 'open google' in query:
+            speak("opening google...")
             webbrowser.open("google.com")
+            timegap=8
 
-        elif 'open stackoverflow' in query:
+        elif 'open stack overflow' in query:
+            speak("opening stackoverflow")
             webbrowser.open("stackoverflow.com")
+            timegap=8
 
         elif 'play music' in query:
-            music_dir = 'C:\\Users\\HP\\Music\\OLD BANGLA'
+            speak("playing music...")
+            music_dir = 'C:\\Users\\HP\\Music\\Hindi music'
             songs = os.listdir(music_dir)
-            print(songs)
-            os.startfile(os.path.join(music_dir,songs[0]))
+            # print(songs)                                                                                                        
+            # print(len(songs))
+            songNumber = random.randint(1,len(songs))
+            # print(songNumber)
+            os.startfile(os.path.join(music_dir,songs[songNumber]))
+            timegap=8
 
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"sir, the time is {strTime}")
+            timegap=1
 
         elif 'open code' in query:
+            speak("opening vs code...")
             codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(codePath)
+            timegap=10
 
         elif 'email' in query: 
             try:
                 speak("Sir, please enter the mail id to whom you want to send the mail")
                 to = input("Enter the mail id: ")
+                speak("Sir, please enter your mail id from which you want to send the mail...")
+                mymail = input("Enter your mail id: ")
+                speak("Enter password: ")
+                # password = input("Enter password: ")
+                password = getpass.getpass(prompt = 'Enter password: ')
                 speak("what should I say?")
                 content = takeCommand()
-                sendEmail(to, content)
+                sendEmail(mymail,password,to, content)
                 speak("Email has been sent!")
             except Exception as e:
                 print(e)
-                speak("sorry baban sir, I am not able to send this email")
+                speak("sorry sir, I have not access to your mail id...")
+            timegap=2
 
         elif 'exit' in query:
-            speak("ok sir...thank you")
+            speak("ok sir...thank you, Have a nice day...")
             break
         else :
             speak("Sorry sir i did not get you...")
+            speak("please say that again...")
+            track=0
+            timegap=1
         
