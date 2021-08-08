@@ -74,7 +74,7 @@ if __name__ == "__main__":
     while True:
         # if track:
         #     time.sleep(timegap)
-        #     speak("Sir, is there anything else which i can help you?")
+        # speak("Sir, is there anything else which i can help you?")
         query = takeCommand().lower()
         # track = 1
         # logic for executing tasks based on query
@@ -141,6 +141,10 @@ if __name__ == "__main__":
             webbrowser.open("www.stackoverflow.com")
             # timegap=8
 
+        elif 'open whatsapp' in query:
+            speak("opening whatsapp...")
+            webbrowser.open("https://web.whatsapp.com/")
+        
         elif 'play music' in query or 'music' in query:
             speak("ok...i am playing music...")
             music_dir = 'C:\\Users\\HP\\Music\\Hindi music'
@@ -183,16 +187,16 @@ if __name__ == "__main__":
 
         elif 'shutdown' in query:
             speak("are you sure?")
-            confirmation=takeCommand().lower()
-            if 'yes' in confirmation:
+            concent=takeCommand().lower()
+            if 'yes' in concent or 'ok' in concent:
                 speak("Shutting down")
                 os.system("shutdown /s /t 1")
                 #  Here /s is for shutdown and /r for restart and /t stands for timer and 0 indicates 0 second. Therefore after executing this program, system gets shutdown within 0 second.
 
         elif 'restart' in query:
             speak("are you sure?")
-            confirmation=takeCommand().lower()
-            if 'yes' in confirmation:
+            concent=takeCommand().lower()
+            if 'yes' in concent:
                 speak("restarting")
                 os.system("shutdown /r /t 1")
 
@@ -206,16 +210,30 @@ if __name__ == "__main__":
             # track=0
             # timegap=1
             continue
+
         elif 'write' in query:
             takeCommand=takeManualCommand
             speak("ok sir, input mode changed")
+
         elif 'speak' in query:
             takeCommand=takeVoiceCommand
             speak("ok sir, input mode changed")
+
+        elif 'show movie' in query or 'movie' in query:
+            path="G:\movie"
+            os.startfile(path)
+
+        elif 'show web series' in query or 'web series' in query:
+            path="G:\web series"
+            os.startfile(path)
+
         else:
             temp = query.replace(' ','+')
             g_url="https://www.google.com/search?q="    
-            res_g = 'sorry! i cant understand but i search from internet to give your answer !...please wait...'
+            res_g = 'sorry! i can\'t understand...may i search in google?'
             speak(res_g)
-            webbrowser.open(g_url+temp)
+            concent=takeCommand().lower()
+            if 'yes' in concent or 'ok' in concent:
+                speak("please wait sir...i am searching...")
+                webbrowser.open(g_url+temp)
         
