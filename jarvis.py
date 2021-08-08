@@ -52,13 +52,10 @@ def takeVoiceCommand():
         query = r.recognize_google(audio, language='en-in')
         print(f"user said: {query}\n")
     except Exception as e:
-        # print(e)
-        # print("Say that again please...")
         return "None"
+
     return query
 
-# def takeCommand():
-    # pass
 def sendEmail(mymail,password,to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
@@ -72,12 +69,7 @@ if __name__ == "__main__":
     wishMe()
     takeCommand=takeVoiceCommand
     while True:
-        # if track:
-        #     time.sleep(timegap)
-        # speak("Sir, is there anything else which i can help you?")
         query = takeCommand().lower()
-        # track = 1
-        # logic for executing tasks based on query
         if "what\'s up" in query or 'how are you' in query:
             stMsgs = ['Just doing my thing!', 'I am fine!', 'Nice!', 'I am nice and full of energy','i am okey ! How are you']
             ans_q = random.choice(stMsgs)
@@ -94,52 +86,42 @@ if __name__ == "__main__":
             speak("According to wikipedia")
             print(results)
             speak(results)
-            # timegap=2
 
         elif 'open youtube' in query:
             speak("opening youtube...")
             webbrowser.open("www.youtube.com")
-            # timegap=8
 
         elif 'open google' in query:
             speak("opening google...")
             webbrowser.open("www.google.com")
-            # timegap=8
 
         elif 'open github' in query:
             speak("opening github...")
             webbrowser.open("https://github.com/Anirban2001")
-            # timegap=6
 
         elif 'open facebook' in query:
             speak("opening facebook")
             webbrowser.open("https://www.facebook.com/")
-            # timegap=8
 
         elif 'open instagram' in query:
             speak("opening instagram")
             webbrowser.open("https://www.instagram.com/")
-            # timegap=8
 
         elif 'open gmail' in query or 'open my mail' in query or 'open email' in query:
             speak("opening gmail...")
             webbrowser.open("https://mail.google.com/mail/u/0/#inbox") 
-            # timegap=8
 
         elif 'open amazon' in query or 'shop online' in query:
             speak("opening amazon")
             webbrowser.open("https://www.amazon.com")
-            # timegap=6
 
         elif 'open flipkart' in query:
             speak("opening flipkart")   
             webbrowser.open("https://www.flipkart.com")
-            # timegap=6
 
         elif 'open stack overflow' in query:
             speak("opening stackoverflow")
             webbrowser.open("www.stackoverflow.com")
-            # timegap=8
 
         elif 'open whatsapp' in query:
             speak("opening whatsapp...")
@@ -154,18 +136,15 @@ if __name__ == "__main__":
             songNumber = random.randint(1,len(songs))
             # print(songNumber)
             os.startfile(os.path.join(music_dir,songs[songNumber]))
-            # timegap=8
 
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"sir, the time is {strTime}")
-            # timegap=1
 
         elif 'open code' in query or 'open vs code' in query:
             speak("opening vs code...")
             codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(codePath)
-            # timegap=10
 
         elif 'send email' in query: 
             try:
@@ -174,7 +153,6 @@ if __name__ == "__main__":
                 speak("Sir, please enter your mail id from which you want to send the mail...")
                 mymail = input("Enter your mail id: ")
                 speak("Enter password: ")
-                # password = input("Enter password: ")
                 password = getpass.getpass(prompt = 'Enter password: ')
                 speak("what should I say?")
                 content = takeCommand()
@@ -183,7 +161,6 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
                 speak("sorry sir, I have not access to your mail id...")
-            # timegap=2
 
         elif 'shutdown' in query:
             speak("are you sure?")
@@ -205,10 +182,6 @@ if __name__ == "__main__":
             break
 
         elif query=="none" :
-            # speak("Sorry sir i did not get you...")
-            # speak("please say that again...")
-            # track=0
-            # timegap=1
             continue
 
         elif 'write' in query:
