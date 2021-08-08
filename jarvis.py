@@ -13,7 +13,7 @@ import getpass
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 # print(voices[1].id)
-engine.setProperty('voice', voices[0].id)
+engine.setProperty('voice', voices[1].id)
 
 
 def speak(audio):
@@ -70,54 +70,79 @@ def sendEmail(mymail,password,to,content):
 
 if __name__ == "__main__":
     wishMe()
-    speak("do you want to say or write?")
-    speak("Enter 1 for say or 2 for write")
-    z = int(input("Enter: "))
-    if z==1:
-        speak("Okk sir...thank you, Please tell how can i help you?")
-        takeCommand = takeVoiceCommand
-    elif z==2:
-        speak("Okk sir...thank you, Please write how can i help you?")
-        takeCommand = takeManualCommand
-    else:
-        speak("Wrong input sir! So by default i am taking manual command")
-        speak("Please write how can i help you?")
-        takeCommand = takeManualCommand
-    track = 0
-    timegap = 2
+    takeCommand=takeVoiceCommand
     while True:
-        if track:
-            time.sleep(timegap)
-            speak("Sir, is there anything else which i can help you?")
+        # if track:
+        #     time.sleep(timegap)
+        #     speak("Sir, is there anything else which i can help you?")
         query = takeCommand().lower()
-        track = 1
+        # track = 1
         # logic for executing tasks based on query
-        if 'wikipedia' in query:
-            speak('searching wikipedia...')
+        if "what\'s up" in query or 'how are you' in query:
+            stMsgs = ['Just doing my thing!', 'I am fine!', 'Nice!', 'I am nice and full of energy','i am okey ! How are you']
+            ans_q = random.choice(stMsgs)
+            speak(ans_q) 
+
+        elif "hello" in query or "hello Jarvis" in query:
+            hel = "Hello Ani ! How May i Help you.."
+            speak(hel)
+
+        elif 'wikipedia' in query:
+            speak('searching details...wait')
             query = query.replace("wikipedia", "")
             results = wikipedia.summary(query, sentences=2)
             speak("According to wikipedia")
             print(results)
             speak(results)
-            timegap=2
+            # timegap=2
 
         elif 'open youtube' in query:
             speak("opening youtube...")
-            webbrowser.open("youtube.com")
-            timegap=8
+            webbrowser.open("www.youtube.com")
+            # timegap=8
 
         elif 'open google' in query:
             speak("opening google...")
-            webbrowser.open("google.com")
-            timegap=8
+            webbrowser.open("www.google.com")
+            # timegap=8
+
+        elif 'open github' in query:
+            speak("opening github...")
+            webbrowser.open("https://github.com/Anirban2001")
+            # timegap=6
+
+        elif 'open facebook' in query:
+            speak("opening facebook")
+            webbrowser.open("https://www.facebook.com/")
+            # timegap=8
+
+        elif 'open instagram' in query:
+            speak("opening instagram")
+            webbrowser.open("https://www.instagram.com/")
+            # timegap=8
+
+        elif 'open gmail' in query or 'open my mail' in query or 'open email' in query:
+            speak("opening gmail...")
+            webbrowser.open("https://mail.google.com/mail/u/0/#inbox") 
+            # timegap=8
+
+        elif 'open amazon' in query or 'shop online' in query:
+            speak("opening amazon")
+            webbrowser.open("https://www.amazon.com")
+            # timegap=6
+
+        elif 'open flipkart' in query:
+            speak("opening flipkart")   
+            webbrowser.open("https://www.flipkart.com")
+            # timegap=6
 
         elif 'open stack overflow' in query:
             speak("opening stackoverflow")
-            webbrowser.open("stackoverflow.com")
-            timegap=8
+            webbrowser.open("www.stackoverflow.com")
+            # timegap=8
 
-        elif 'play music' in query:
-            speak("playing music...")
+        elif 'play music' in query or 'music' in query:
+            speak("ok...i am playing music...")
             music_dir = 'C:\\Users\\HP\\Music\\Hindi music'
             songs = os.listdir(music_dir)
             # print(songs)                                                                                                        
@@ -125,20 +150,20 @@ if __name__ == "__main__":
             songNumber = random.randint(1,len(songs))
             # print(songNumber)
             os.startfile(os.path.join(music_dir,songs[songNumber]))
-            timegap=8
+            # timegap=8
 
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"sir, the time is {strTime}")
-            timegap=1
+            # timegap=1
 
-        elif 'open code' in query:
+        elif 'open code' in query or 'open vs code' in query:
             speak("opening vs code...")
             codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(codePath)
-            timegap=10
+            # timegap=10
 
-        elif 'email' in query: 
+        elif 'send email' in query: 
             try:
                 speak("Sir, please enter the mail id to whom you want to send the mail")
                 to = input("Enter the mail id: ")
@@ -154,14 +179,43 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
                 speak("sorry sir, I have not access to your mail id...")
-            timegap=2
+            # timegap=2
 
-        elif 'exit' in query:
+        elif 'shutdown' in query:
+            speak("are you sure?")
+            confirmation=takeCommand().lower()
+            if 'yes' in confirmation:
+                speak("Shutting down")
+                os.system("shutdown /s /t 1")
+                #  Here /s is for shutdown and /r for restart and /t stands for timer and 0 indicates 0 second. Therefore after executing this program, system gets shutdown within 0 second.
+
+        elif 'restart' in query:
+            speak("are you sure?")
+            confirmation=takeCommand().lower()
+            if 'yes' in confirmation:
+                speak("restarting")
+                os.system("shutdown /r /t 1")
+
+        elif 'exit' in query or 'goodbye' in query or 'abort' in query or 'stop' in query or 'bye' in query or 'quit' in query or 'get out' in query:
             speak("ok sir...thank you, Have a nice day...")
             break
-        else :
-            speak("Sorry sir i did not get you...")
-            speak("please say that again...")
-            track=0
-            timegap=1
+
+        elif query=="none" :
+            # speak("Sorry sir i did not get you...")
+            # speak("please say that again...")
+            # track=0
+            # timegap=1
+            continue
+        elif 'write' in query:
+            takeCommand=takeManualCommand
+            speak("ok sir, input mode changed")
+        elif 'speak' in query:
+            takeCommand=takeVoiceCommand
+            speak("ok sir, input mode changed")
+        else:
+            temp = query.replace(' ','+')
+            g_url="https://www.google.com/search?q="    
+            res_g = 'sorry! i cant understand but i search from internet to give your answer !...please wait...'
+            speak(res_g)
+            webbrowser.open(g_url+temp)
         
