@@ -9,6 +9,7 @@ import smtplib
 import time
 import random
 import getpass
+import pywhatkit
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -32,7 +33,7 @@ def wishMe():
     else:
         speak("Good Evening!")
 
-    speak("I am Jarvis sir, I am here to help you")
+    speak("I am Jarvis sir,how can i help you?")
 
 def takeManualCommand():
     query = input("write: ")
@@ -43,7 +44,8 @@ def takeVoiceCommand():
     it takes microphone input from the user and returns string output
     """
     r = sr.Recognizer()
-    with sr.Microphone() as source:
+    # device_index=0
+    with sr.Microphone(device_index=0) as source:
         print("Listening...")
         r.pause_threshold = 1
         audio = r.listen(source)
@@ -68,6 +70,7 @@ def sendEmail(mymail,password,to,content):
 if __name__ == "__main__":
     wishMe()
     takeCommand=takeVoiceCommand
+    # takeCommand=takeManualCommand
     while True:
         query = takeCommand().lower()
         if "what\'s up" in query or 'how are you' in query:
@@ -76,7 +79,7 @@ if __name__ == "__main__":
             speak(ans_q) 
 
         elif "hello" in query or "hello Jarvis" in query:
-            hel = "Hello Ani ! How May i Help you.."
+            hel = "yes sir, i am here..."
             speak(hel)
 
         elif 'wikipedia' in query:
@@ -91,9 +94,24 @@ if __name__ == "__main__":
             speak("opening youtube...")
             webbrowser.open("www.youtube.com")
 
+        elif 'youtube' in query:
+            content = query.replace('play','')
+            print(content)
+            content = content.replace('youtube','')
+            print(content)
+            content = content.replace(' in ',' ')
+            print(content)
+            content = content.replace(' form ',' ')
+            speak("playing" + content)
+            pywhatkit.playonyt(content)
+
         elif 'open google' in query:
             speak("opening google...")
             webbrowser.open("www.google.com")
+
+        elif 'close chrome' in query:
+            speak("chrome closed")
+            os.system("taskkill /f /im chrome.exe")
 
         elif 'open github' in query:
             speak("opening github...")
@@ -109,7 +127,7 @@ if __name__ == "__main__":
 
         elif 'open gmail' in query or 'open my mail' in query or 'open email' in query:
             speak("opening gmail...")
-            webbrowser.open("https://mail.google.com/mail/u/0/#inbox") 
+            webbrowser.open("https://mail.google.com/mail/u/0/#inbox")
 
         elif 'open amazon' in query or 'shop online' in query:
             speak("opening amazon")
@@ -126,8 +144,24 @@ if __name__ == "__main__":
         elif 'open whatsapp' in query:
             speak("opening whatsapp...")
             webbrowser.open("https://web.whatsapp.com/")
+
+        elif 'class schedule' in query:
+            speak("here is your today's class schedule")
+            webbrowser.open("https://calendar.google.com/calendar/u/3/r")
+
+        elif 'open gsuite mail' in query or 'gsuite' in query or 'g suite' in query:
+            speak("opening")
+            webbrowser.open("https://mail.google.com/mail/u/3/#inbox")
+
+        elif 'open gmail' in query:
+            speak("opening gmail")
+            webbrowser.open("https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox")
         
-        elif 'play music' in query or 'music' in query:
+        elif 'open superset' in query or 'superset' in query:
+            speak("opening superset")
+            webbrowser.open("https://app.joinsuperset.com/#/s/feed")
+
+        elif 'play music' in query or 'play some music' in query:
             speak("ok...i am playing music...")
             music_dir = 'C:\\Users\\HP\\Music\\Hindi music'
             songs = os.listdir(music_dir)
@@ -137,9 +171,13 @@ if __name__ == "__main__":
             # print(songNumber)
             os.startfile(os.path.join(music_dir,songs[songNumber]))
 
+        elif 'stop music' in query or 'close music' in query:
+            speak("music stopped")
+            os.system("taskkill /f /im PotPlayerMini64.exe")
+
         elif 'time' in query:
-            strTime = datetime.datetime.now().strftime("%H:%M:%S")
-            speak(f"sir, the time is {strTime}")
+            strTime = datetime.datetime.now().strftime("%I:%M %p")
+            speak(f"sir, it is {strTime}")
 
         elif 'open code' in query or 'open vs code' in query:
             speak("opening vs code...")
@@ -209,4 +247,6 @@ if __name__ == "__main__":
             if 'yes' in concent or 'ok' in concent:
                 speak("please wait sir...i am searching...")
                 webbrowser.open(g_url+temp)
+            elif 'no' in concent:
+                speak("ok")
         
