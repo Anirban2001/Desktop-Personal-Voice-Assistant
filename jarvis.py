@@ -231,11 +231,18 @@ if __name__ == "__main__":
             speak("ok sir, input mode changed")
 
         elif 'show movie' in query or 'movie' in query:
+            speak("opening movie list")
             path="G:\movie"
             os.startfile(path)
 
         elif 'show web series' in query or 'web series' in query:
-            path="G:\web series"
+            speak("opening web series list")
+            path = "G:\web series"
+            os.startfile(path)
+
+        elif 'open pt' in query:
+            speak("opening pt")
+            path = "G:\\folder\\New folder (5)\\New folder (5)\\New folder"
             os.startfile(path)
 
         else:
