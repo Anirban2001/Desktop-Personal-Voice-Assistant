@@ -40,21 +40,26 @@ def takeManualCommand():
     query = input("write: ")
     return query
 
+fg=0
 def takeVoiceCommand():
+    global fg
     """
     it takes microphone input from the user and returns string output
     """
     r = sr.Recognizer()
     # device_index=0
     with sr.Microphone() as source: 
-        print("Listening...")
+        if fg==0:
+            print("Listening...")
         # r.pause_threshold = 1
         audio = r.listen(source)
     try:
-        print("Recognizing...")
         query = r.recognize_google(audio, language='en-in')
+        # print("Recognizing...")
         print(f"user said: {query}\n")
+        fg=0
     except Exception as e:
+        fg=1
         return "None"
 
     return query
