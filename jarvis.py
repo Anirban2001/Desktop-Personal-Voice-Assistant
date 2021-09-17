@@ -35,48 +35,57 @@ def wishMe():
 
     speak("I am Jarvis sir,how can i help you?")
 
+
 def takeManualCommand():
     query = input("write: ")
     return query
 
+fg=0
 def takeVoiceCommand():
+    global fg
     """
     it takes microphone input from the user and returns string output
     """
     r = sr.Recognizer()
     # device_index=0
-    with sr.Microphone(device_index=0) as source:
-        print("Listening...")
-        r.pause_threshold = 1
+    with sr.Microphone() as source: 
+        if fg==0:
+            print("Listening...")
+        # r.pause_threshold = 1
         audio = r.listen(source)
     try:
-        print("Recognizing...")
         query = r.recognize_google(audio, language='en-in')
+        # print("Recognizing...")
         print(f"user said: {query}\n")
+        fg=0
     except Exception as e:
+        fg=1
         return "None"
 
     return query
 
-def sendEmail(mymail,password,to,content):
-    server = smtplib.SMTP('smtp.gmail.com',587)
+
+def sendEmail(mymail, password, to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    
-    server.login(mymail,password)
-    server.sendmail(mymail,to,content)
+
+    server.login(mymail, password)
+    server.sendmail(mymail, to, content)
     server.close()
+
 
 if __name__ == "__main__":
     wishMe()
-    takeCommand=takeVoiceCommand
+    takeCommand = takeVoiceCommand
     # takeCommand=takeManualCommand
     while True:
         query = takeCommand().lower()
         if "what\'s up" in query or 'how are you' in query:
-            stMsgs = ['Just doing my thing!', 'I am fine!', 'Nice!', 'I am nice and full of energy','i am okey ! How are you']
+            stMsgs = ['Just doing my thing!', 'I am fine!', 'Nice!',
+                      'I am nice and full of energy', 'i am okey ! How are you']
             ans_q = random.choice(stMsgs)
-            speak(ans_q) 
+            speak(ans_q)
 
         elif "hello" in query or "hello Jarvis" in query:
             hel = "yes sir, i am here..."
@@ -95,13 +104,13 @@ if __name__ == "__main__":
             webbrowser.open("www.youtube.com")
 
         elif 'youtube' in query:
-            content = query.replace('play','')
+            content = query.replace('play', '')
             print(content)
-            content = content.replace('youtube','')
+            content = content.replace('youtube', '')
             print(content)
-            content = content.replace(' in ',' ')
+            content = content.replace(' in ', ' ')
             print(content)
-            content = content.replace(' form ',' ')
+            content = content.replace(' form ', ' ')
             speak("playing" + content)
             pywhatkit.playonyt(content)
 
@@ -109,9 +118,23 @@ if __name__ == "__main__":
             speak("opening google...")
             webbrowser.open("www.google.com")
 
-        elif 'close chrome' in query:
+        elif 'close chrome' in query or 'close google' in query:
             speak("chrome closed")
             os.system("taskkill /f /im chrome.exe")
+        
+        elif 'send whatsapp message' in query:
+            try:
+                pywhatkit.sendwhatmsg_instantly(phone_no="+919641152624",message="hii i am jarvis",tab_close=True)
+                speak("Successfully sent!")
+            except:
+                speak("Sorry sir, there is some error")
+
+        elif 'convert text to handwriting' in query:
+            try:
+                pywhatkit.text_to_handwriting(string="hello.\n i am Anirban Dey",save_to="x.png",rgb=(0,0,138))
+                speak("handwritten saved")
+            except:
+                speak("some error occured")
 
         elif 'open github' in query:
             speak("opening github...")
@@ -134,7 +157,7 @@ if __name__ == "__main__":
             webbrowser.open("https://www.amazon.com")
 
         elif 'open flipkart' in query:
-            speak("opening flipkart")   
+            speak("opening flipkart")
             webbrowser.open("https://www.flipkart.com")
 
         elif 'open stack overflow' in query:
@@ -155,25 +178,53 @@ if __name__ == "__main__":
 
         elif 'open gmail' in query:
             speak("opening gmail")
-            webbrowser.open("https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox")
-        
+            webbrowser.open(
+                "https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox")
+
         elif 'open superset' in query or 'superset' in query:
             speak("opening superset")
             webbrowser.open("https://app.joinsuperset.com/#/s/feed")
 
         elif 'play music' in query or 'play some music' in query:
             speak("ok...i am playing music...")
-            music_dir = 'C:\\Users\\HP\\Music\\Hindi music'
+            music_dir = 'C:\\Users\\HP\\Music'
             songs = os.listdir(music_dir)
-            # print(songs)                                                                                                        
+            # print(songs)
             # print(len(songs))
-            songNumber = random.randint(1,len(songs))
+            songNumber = random.randint(1, len(songs))
             # print(songNumber)
-            os.startfile(os.path.join(music_dir,songs[songNumber]))
+            os.startfile(os.path.join(music_dir, songs[songNumber]))
 
         elif 'stop music' in query or 'close music' in query:
             speak("music stopped")
             os.system("taskkill /f /im PotPlayerMini64.exe")
+
+        elif 'change music' in query or 'change the song' in query:
+            speak("music changed")
+            os.system("taskkill /f /im PotPlayerMini64.exe")
+            music_dir = 'C:\\Users\\HP\\Music'
+            songs = os.listdir(music_dir)
+            songNumber = random.randint(1, len(songs))
+            os.startfile(os.path.join(music_dir, songs[songNumber]))
+
+        elif 'play video' in query or 'open video' in query:
+            speak("ok...i am playing video...")
+            video_dir = 'G:\\folder\\New folder (5)\\New folder (5)\\New folder'
+            videos = os.listdir(video_dir)
+            videoNumber = random.randint(1, len(videos))
+            os.startfile(os.path.join(video_dir, videos[videoNumber]))
+
+        elif 'stop video' in query or 'close video' in query:
+            speak("video closed")
+            os.system("taskkill /f /im PotPlayerMini64.exe")
+        
+        elif 'change video' in query or 'change the video' in query:
+            speak("video changed")
+            os.system("taskkill /f /im PotPlayerMini64.exe")
+            video_dir = 'G:\\folder\\New folder (5)\\New folder (5)\\New folder'
+            videos = os.listdir(video_dir)
+            videoNumber = random.randint(1, len(videos))
+            os.startfile(os.path.join(video_dir, videos[videoNumber]))
 
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%I:%M %p")
@@ -184,17 +235,18 @@ if __name__ == "__main__":
             codePath = "C:\\Users\\HP\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(codePath)
 
-        elif 'send email' in query: 
+        elif 'send email' in query:
             try:
                 speak("Sir, please enter the mail id to whom you want to send the mail")
                 to = input("Enter the mail id: ")
-                speak("Sir, please enter your mail id from which you want to send the mail...")
+                speak(
+                    "Sir, please enter your mail id from which you want to send the mail...")
                 mymail = input("Enter your mail id: ")
                 speak("Enter password: ")
-                password = getpass.getpass(prompt = 'Enter password: ')
+                password = getpass.getpass(prompt='Enter password: ')
                 speak("what should I say?")
                 content = takeCommand()
-                sendEmail(mymail,password,to, content)
+                sendEmail(mymail, password, to, content)
                 speak("Email has been sent!")
             except Exception as e:
                 print(e)
@@ -202,7 +254,7 @@ if __name__ == "__main__":
 
         elif 'shutdown' in query:
             speak("are you sure?")
-            concent=takeCommand().lower()
+            concent = takeCommand().lower()
             if 'yes' in concent or 'ok' in concent:
                 speak("Shutting down")
                 os.system("shutdown /s /t 1")
@@ -210,7 +262,7 @@ if __name__ == "__main__":
 
         elif 'restart' in query:
             speak("are you sure?")
-            concent=takeCommand().lower()
+            concent = takeCommand().lower()
             if 'yes' in concent:
                 speak("restarting")
                 os.system("shutdown /r /t 1")
@@ -219,34 +271,34 @@ if __name__ == "__main__":
             speak("ok sir...thank you, Have a nice day...")
             break
 
-        elif query=="none" :
+        elif query == "none":
             continue
 
         elif 'write' in query:
-            takeCommand=takeManualCommand
+            takeCommand = takeManualCommand
             speak("ok sir, input mode changed")
 
         elif 'speak' in query:
-            takeCommand=takeVoiceCommand
+            takeCommand = takeVoiceCommand
             speak("ok sir, input mode changed")
 
         elif 'show movie' in query or 'movie' in query:
-            path="G:\movie"
+            path = "G:\movie"
             os.startfile(path)
 
         elif 'show web series' in query or 'web series' in query:
-            path="G:\web series"
+            path = "G:\web series"
             os.startfile(path)
 
         else:
-            temp = query.replace(' ','+')
-            g_url="https://www.google.com/search?q="    
-            res_g = 'sorry! i can\'t understand...may i search in google?'
-            speak(res_g)
-            concent=takeCommand().lower()
-            if 'yes' in concent or 'ok' in concent:
-                speak("please wait sir...i am searching...")
-                webbrowser.open(g_url+temp)
-            elif 'no' in concent:
-                speak("ok")
-        
+            temp = query.replace(' ', '+')
+            # g_url = "https://www.google.com/search?q="
+            # res_g = 'sorry! i can\'t understand...may i search in google?'
+            res = 'sorry! i can\'t understand...'
+            speak(res)
+            # concent = takeCommand().lower()
+            # if 'yes' in concent or 'ok' in concent:
+            #     speak("please wait sir...i am searching...")
+            #     webbrowser.open(g_url+temp)
+            # elif 'no' in concent:
+            #     speak("ok")
