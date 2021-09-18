@@ -48,7 +48,8 @@ def takeVoiceCommand():
     """
     r = sr.Recognizer()
     # device_index=0
-    with sr.Microphone() as source: 
+    with sr.Microphone(device_index=0) as source: 
+        # sr.SAMPLE_RATE = 48000
         if fg==0:
             print("Listening...")
         # r.pause_threshold = 1
@@ -113,6 +114,12 @@ if __name__ == "__main__":
             content = content.replace(' form ', ' ')
             speak("playing" + content)
             pywhatkit.playonyt(content)
+        
+        elif 'go' in query:
+            content = query.replace('go','')
+            g_url = "https://www.google.com/search?q="
+            speak("here the results")
+            webbrowser.open(g_url+content)
 
         elif 'open google' in query:
             speak("opening google...")
@@ -123,8 +130,15 @@ if __name__ == "__main__":
             os.system("taskkill /f /im chrome.exe")
         
         elif 'send whatsapp message' in query:
+            
             try:
-                pywhatkit.sendwhatmsg_instantly(phone_no="+919641152624",message="hii i am jarvis",tab_close=True)
+                speak("Enter the number")
+                number = input("Enter the number: ")
+                if number[0]!='+':
+                    number = "+91"+number
+                speak("Enter the message")
+                Message = input("Enter the message: ")
+                pywhatkit.sendwhatmsg_instantly(phone_no=number,message=Message,tab_close=True)
                 speak("Successfully sent!")
             except:
                 speak("Sorry sir, there is some error")
@@ -135,6 +149,7 @@ if __name__ == "__main__":
                 speak("handwritten saved")
             except:
                 speak("some error occured")
+                
 
         elif 'open github' in query:
             speak("opening github...")
@@ -302,3 +317,5 @@ if __name__ == "__main__":
             #     webbrowser.open(g_url+temp)
             # elif 'no' in concent:
             #     speak("ok")
+
+
