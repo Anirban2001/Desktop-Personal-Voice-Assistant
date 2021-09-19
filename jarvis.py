@@ -11,6 +11,7 @@ import time
 import random
 import getpass
 import pywhatkit
+import ast 
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -42,27 +43,48 @@ def takeManualCommand():
     return query
 
 fg=0
+# def takeVoiceCommand():
+#     global fg
+#     """
+#     it takes microphone input from the user and returns string output
+#     """
+#     r = sr.Recognizer()
+#     # device_index=0
+#     with sr.Microphone(device_index=0) as source: 
+#         # sr.SAMPLE_RATE = 48000
+#         if fg==0:
+#             print("Listening...")
+#         # r.pause_threshold = 1
+#         audio = r.listen(source)
+#     try:
+#         query = r.recognize_google(audio, language='en-in')
+#         # print("Recognizing...")
+#         print(f"user said: {query}\n")
+#         fg=0
+#     except Exception as e:
+#         fg=1
+#         return "None"
+
+#     return query
+
 def takeVoiceCommand():
-    global fg
     """
     it takes microphone input from the user and returns string output
     """
-    r = sr.Recognizer()
-    # device_index=0
-    with sr.Microphone(device_index=0) as source: 
-        # sr.SAMPLE_RATE = 48000
-        if fg==0:
-            print("Listening...")
-        # r.pause_threshold = 1
-        audio = r.listen(source)
-    try:
-        query = r.recognize_google(audio, language='en-in')
-        # print("Recognizing...")
-        print(f"user said: {query}\n")
-        fg=0
-    except Exception as e:
-        fg=1
-        return "None"
+    print("Listening...")
+    query = "none" 
+    while query == "none":
+        r = sr.Recognizer()
+        with sr.Microphone(device_index=0) as source: 
+            # sr.SAMPLE_RATE = 48000
+            # r.pause_threshold = 1
+            audio = r.listen(source)
+        try:
+            query = r.recognize_google(audio, language='en-in')
+            # print("Recognizing...")
+            print(f"user said: {query}\n")
+        except Exception as e:
+            query = "none"
 
     return query
 
@@ -116,7 +138,7 @@ if __name__ == "__main__":
             speak("playing" + content)
             pywhatkit.playonyt(content)
         
-        elif 'go' in query:
+        elif 'go ' in query:
             content = query.replace('go','')
             g_url = "https://www.google.com/search?q="
             speak("here the results")
@@ -131,15 +153,49 @@ if __name__ == "__main__":
             os.system("taskkill /f /im chrome.exe")
         
         elif 'send whatsapp message' in query:
-            
+            pos = query.find("to")
+            if pos == -1:
+                speak("Enter the contact name whom you want to send the message")
+                name = input("Enter the contact name: ")
+            else :
+                pos+=2
+                if pos>=len(query):
+                    speak("message can not send")
+                    continue
+                if query[pos]==' ':
+                    pos+=1
+                name = query[pos:]
+            print(name)
+            dict_file = open("phone_book.txt", "r")
+            dict_string = dict_file.readline().strip()
+            dict_file.close()
+
+            phonebook = ast.literal_eval(dict_string)
+            number = "123"
+            if name in phonebook:
+                number = phonebook[name]
+                print(number)
+            else:
+                speak("contact is not present in the phonebook")
+                speak("do you want to add this contact in the phonebook?")
+                concent_add = input("Do you want to add this number in the phonebook?Y/N: ")
+                concent_add = concent_add.lower()
+                if concent_add[0]=='y':
+                    number = input("Enter the number: ")
+                    if number[0]!='+':
+                        number = "+91" + number
+                    phonebook[name] = number 
+                    file = open("phone_book.txt","w")
+                    file.write(str(phonebook))
+                    file.close()
+                    speak("contact added")
+                else:
+                    speak("ok")
+                    continue
             try:
-                speak("Enter the number")
-                number = input("Enter the number: ")
-                if number[0]!='+':
-                    number = "+91"+number
-                speak("Enter the message")
-                Message = input("Enter the message: ")
-                pywhatkit.sendwhatmsg_instantly(phone_no=number,message=Message,tab_close=True)
+                speak("what is the message?")
+                Message = takeCommand().lower()
+                pywhatkit.sendwhatmsg_instantly(number,Message,20)
                 speak("Successfully sent!")
             except:
                 speak("Sorry sir, there is some error")
@@ -187,6 +243,18 @@ if __name__ == "__main__":
         elif 'class schedule' in query:
             speak("here is your today's class schedule")
             webbrowser.open("https://calendar.google.com/calendar/u/3/r")
+        
+        elif 'open drive' in query:
+            speak("opening google drive")
+            webbrowser.open("https://drive.google.com/drive/u/3/folders/1rh9aNa-qNkv9rSgl-M-5osRpjCuTxqgY")
+        
+        elif 'open meet' in query:
+            speak("opening google meet")
+            webbrowser.open("https://meet.google.com/?hs=197&pli=1&authuser=3")
+
+        elif 'open classroom' in query:
+            speak("opening google classroom")
+            webbrowser.open("https://classroom.google.com/u/3/h")
 
         elif 'open gsuite mail' in query or 'gsuite' in query or 'g suite' in query:
             speak("opening")
@@ -308,15 +376,7 @@ if __name__ == "__main__":
 
         else:
             temp = query.replace(' ', '+')
-            # g_url = "https://www.google.com/search?q="
-            # res_g = 'sorry! i can\'t understand...may i search in google?'
             res = 'sorry! i can\'t understand...'
             speak(res)
-            # concent = takeCommand().lower()
-            # if 'yes' in concent or 'ok' in concent:
-            #     speak("please wait sir...i am searching...")
-            #     webbrowser.open(g_url+temp)
-            # elif 'no' in concent:
-            #     speak("ok")
 
 
