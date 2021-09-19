@@ -50,7 +50,8 @@ def takeVoiceCommand():
     query = "none" 
     while query == "none":
         r = sr.Recognizer()
-        with sr.Microphone(device_index=0) as source: 
+        with sr.Microphone(device_index=0) as source:
+            r.adjust_for_ambient_noise(source)
             # r.pause_threshold = 1
             audio = r.listen(source)
         try:
