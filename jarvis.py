@@ -1,4 +1,3 @@
-# made changes in test
 import pyttsx3
 import datetime
 import speech_recognition as sr
@@ -16,7 +15,7 @@ import ast
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 # print(voices[1].id)
-engine.setProperty('voice', voices[1].id)
+engine.setProperty('voice', voices[0].id)
 
 
 def speak(audio):
@@ -42,30 +41,6 @@ def takeManualCommand():
     query = input("write: ")
     return query
 
-fg=0
-# def takeVoiceCommand():
-#     global fg
-#     """
-#     it takes microphone input from the user and returns string output
-#     """
-#     r = sr.Recognizer()
-#     # device_index=0
-#     with sr.Microphone(device_index=0) as source: 
-#         # sr.SAMPLE_RATE = 48000
-#         if fg==0:
-#             print("Listening...")
-#         # r.pause_threshold = 1
-#         audio = r.listen(source)
-#     try:
-#         query = r.recognize_google(audio, language='en-in')
-#         # print("Recognizing...")
-#         print(f"user said: {query}\n")
-#         fg=0
-#     except Exception as e:
-#         fg=1
-#         return "None"
-
-#     return query
 
 def takeVoiceCommand():
     """
@@ -76,12 +51,10 @@ def takeVoiceCommand():
     while query == "none":
         r = sr.Recognizer()
         with sr.Microphone(device_index=0) as source: 
-            # sr.SAMPLE_RATE = 48000
             # r.pause_threshold = 1
             audio = r.listen(source)
         try:
             query = r.recognize_google(audio, language='en-in')
-            # print("Recognizing...")
             print(f"user said: {query}\n")
         except Exception as e:
             query = "none"
